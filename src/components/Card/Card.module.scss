@@ -1,19 +1,19 @@
-.task {
+.issue {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 0 15px;
+    padding: 20px;
     min-height: 106px;
     border-radius: 5px;
     max-width: 311px;
-    /* background: ${({ isDragging }) =>
-    isDragging ? 'rgba(255, 59, 59, 0.15)' : 'white'}; */
     background: white;
     background-image: url('../../../public/img/bg-item.jpg');
     background-size: 100% 100%;
     background-position: center center;
     margin-top: 15px;
+    text-align: left;
+    overflow: hidden;
 }
 
 .title {

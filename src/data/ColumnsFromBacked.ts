@@ -2,7 +2,6 @@ import { IColumns, IGitHubIssue } from "../interface";
 import { v4 as uuidv4 } from "uuid";
 
 export const ColumnsFromBackend = (
-  todos: IGitHubIssue[],
   todosTodo: IGitHubIssue[],
   todosInProcess: IGitHubIssue[],
   todosDone: IGitHubIssue[]
@@ -11,7 +10,7 @@ export const ColumnsFromBackend = (
     [uuidv4()]: {
       title: "ToDo",
       bg: "/img/bg-section-1.jpg",
-      items: todos,
+      items: todosTodo,
     },
     [uuidv4()]: {
       title: "In Progress",

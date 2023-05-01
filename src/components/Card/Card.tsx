@@ -18,7 +18,7 @@ const Card: React.FC<CardProps> = ({ item, index }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <div className={styles.task}>
+          <div className={styles.issue}>
             <p className={styles.title}>{item.title}</p>
             <div className={styles.details}>
               <p>#{item.number}</p>

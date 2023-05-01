@@ -7,17 +7,17 @@ import Card from "../Card/Card";
 import { useAppSelector } from "../../redux/redux-hooks";
 
 const Board = () => {
-  const todos = useAppSelector((state) => state.main.todos);
   const todosTodo = useAppSelector((state) => state.main.todosTodo);
   const todosInProcess = useAppSelector((state) => state.main.todosInProcess);
   const todosDone = useAppSelector((state) => state.main.todosDone);
+  const helper = useAppSelector((state) => state.main.helper);
   const [columns, setColumns] = React.useState<IColumns>(
-    ColumnsFromBackend(todos, todosTodo, todosInProcess, todosDone)
+    ColumnsFromBackend(todosTodo, todosInProcess, todosDone)
   );
 
   React.useEffect(() => {
-    setColumns(ColumnsFromBackend(todos, todosTodo, todosInProcess, todosDone));
-  }, [todos]);
+    setColumns(ColumnsFromBackend(todosTodo, todosInProcess, todosDone));
+  }, [todosTodo, todosInProcess, todosDone, helper]);
 
   const onDragEnd = (result: IDragResult, columns: IColumns) => {
     if (!result.destination) return;
@@ -63,19 +63,24 @@ const Board = () => {
             return (
               <Droppable key={columnId} droppableId={columnId}>
                 {(provided, snapshot) => (
-                  <div
-                    className={styles.task}
-                    style={{
-                      backgroundImage: `url(${columns[columnId].bg})`,
-                    }}
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                  >
+                  <div className={styles.card}>
                     <span className={styles.title}>{column.title}</span>
-                    {column.items.map((item, index) => (
-                      <Card key={item.id} item={item} index={index} />
-                    ))}
-                    {provided.placeholder}
+                    <div
+                      className={styles.task}
+                      style={{
+                        backgroundImage: `url(${columns[columnId].bg})`,
+                      }}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      <div className={styles.issues}>
+                        {column.items.map((item, index) => (
+                          <Card key={item.id} item={item} index={index} />
+                        ))}
+                      </div>
+
+                      {provided.placeholder}
+                    </div>
                   </div>
                 )}
               </Droppable>

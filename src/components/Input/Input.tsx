@@ -4,7 +4,12 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
-import { setInputValue, setTodos } from "../../redux/slices/mainSlice";
+import {
+  setInputValue,
+  setNullStorage,
+  setTodos,
+  setHelper,
+} from "../../redux/slices/mainSlice";
 import axios from "axios";
 import { IGitHubIssue, IGitHubRepo } from "../../interface";
 
@@ -27,23 +32,33 @@ const Input = () => {
     setRepoOwner(inputValue.split("/")[3]);
     setRepo(inputValue);
     const getTodos = async () => {
-      const URL: string =
-        inputValue.replace("github.com", "api.github.com/repos") + "/issues";
-      const response = await axios(URL);
-      const data: IGitHubIssue[] = response.data;
-      dispatch(setTodos(data));
+      try {
+        dispatch(setHelper());
+        dispatch(setNullStorage());
+        
+        const URL: string =
+          inputValue.replace("github.com", "api.github.com/repos") + "/issues";
+
+        const response = await axios(URL);
+        const data: IGitHubIssue[] = response.data;
+        dispatch(setTodos(data));
+      } catch (error: any) {
+        console.log(error);
+        alert(error.message);
+      }
     };
     const getStars = async () => {
-      const response = await axios(inputValue);
+      const URL: string = inputValue.replace(
+        "github.com",
+        "api.github.com/repos"
+      );
+      const response = await axios(URL);
       const data: IGitHubRepo = response.data;
       setStars(data.stargazers_count);
     };
-    try {
-      getTodos();
-    } catch (error: any) {
-      console.log(error);
-      alert(error.message);
-    }
+
+    getTodos();
+    getStars();
   };
 
   return (
@@ -83,7 +98,14 @@ const Input = () => {
             {repo.split("/").pop()}
           </a>
           <img src="/img/star.jpg" alt="star"></img>
-          <span>{stars} stars</span>
+          <span>
+            {stars > 1000000
+              ? `${Math.floor(stars / 1000000)} MLN`
+              : stars > 1000
+              ? `${Math.floor(stars / 1000)} K`
+              : stars}{" "}
+            stars
+          </span>
         </div>
       )}
     </>
