@@ -1,0 +1,99 @@
+.group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.input_wrap {
+    flex: 1;
+    position: relative;
+}
+
+.input {
+    width: 100%;
+    padding: 5px;
+    
+}
+
+.input_wrap::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 2px solid black;
+    border-radius: 5px;
+    transform: skew(5deg);
+    z-index: -1;
+  }
+  
+  .input_wrap::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 2px solid black;
+    border-radius: 5px;
+    transform: skew(-5deg);
+    z-index: -1;
+  }
+
+  .btn_wrap {
+    position: relative;
+    width: 10%;
+    background: none;
+    
+  }
+
+.btn {
+    width: 100%;
+    height: 100%;
+    padding: 5px 5px;
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 2px solid black;
+    border-radius: 5px;
+    transform: skew(5deg);
+    z-index: -1;
+  }
+  
+  .btn::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border: 2px solid black;
+    border-radius: 5px;
+    transform: skew(-5deg);
+    z-index: -1;
+  }
+
+  .below {
+    display: flex;
+    margin-bottom: 10px;
+    text-align: start;
+    font-size: 20px;
+    a {
+        color: blue;
+    }
+    img {
+        margin-left: 20px;
+    }
+  }
+
+  .divider {
+    margin: 0 10px;
+    color: blue;
+  }
