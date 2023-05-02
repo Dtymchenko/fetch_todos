@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IGitHubIssue } from "../../interface";
-import { IMoveItem } from "../../interface";
 
 interface initialState {
   inputValue: string;
@@ -39,24 +38,13 @@ export const mainSlice = createSlice({
       state.todosTodo = action.payload.todosTodo.items;
       state.todosInProgress = action.payload.todosInProgress.items;
       state.todosDone = action.payload.todosDone.items;
-
-      console.log("moveItemLocalStorage works");
-
       const storage = JSON.parse(localStorage.getItem(state.REPO_URL) || "{}");
       const data = {
         todosTodo: action.payload.todosTodo.items,
         todosInProgress: action.payload.todosInProgress.items,
         todosDone: action.payload.todosDone.items,
-        // todosTodo: state.todosTodo,
-        // todosInProgress: state.todosInProgress,
-        // todosDone: state.todosDone,
       };
-      console.log("storage", storage);
-      console.log("data", data);
       localStorage.setItem(state.REPO_URL, JSON.stringify(data));
-      console.log("storage saved to local storage");
-      console.log("storage", storage);
-      console.log("data", data);
     },
     setTodos(state, action) {
       state.REPO_URL = action.payload[0].repository_url;
@@ -76,15 +64,38 @@ export const mainSlice = createSlice({
               (item: IGitHubIssue) => item.title === todo.title
             )
           ) {
-            state.todosInProgress = [...state.todosInProgress, todo];
-          } else if (
+            state.todosInProgress = storage?.todosInProgress.map(
+              (item: IGitHubIssue) => {
+                if (item.title === todo.title) {
+                  return todo;
+                }
+                return item;
+              }
+            );
+          }
+          if (
             storage?.todosDone?.some(
               (item: IGitHubIssue) => item.title === todo.title
             )
           ) {
-            state.todosDone = [...state.todosDone, todo];
-          } else {
-            state.todosTodo = [...state.todosTodo, todo];
+            state.todosDone = storage?.todosDone.map((item: IGitHubIssue) => {
+              if (item.title === todo.title) {
+                return todo;
+              }
+              return item;
+            });
+          }
+          if (
+            storage?.todosTodo?.some(
+              (item: IGitHubIssue) => item.title === todo.title
+            )
+          ) {
+            state.todosTodo = storage?.todosTodo.map((item: IGitHubIssue) => {
+              if (item.title === todo.title) {
+                return todo;
+              }
+              return item;
+            });
           }
         });
         const data = {

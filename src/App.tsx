@@ -4,9 +4,8 @@ import Board from "./components/Board/Board";
 
 function App() {
 
-  
-
   return (
+    
     <div className="app">
       <Input />
       <Board />

@@ -43,7 +43,6 @@ const Board = () => {
             items: destItems,
           },
         };
-        console.log("updatedColumns", updatedColumns);
         dispatch(moveItem(updatedColumns));
         return updatedColumns;
       });
@@ -60,18 +59,11 @@ const Board = () => {
             items: copiedItems,
           },
         };
-        console.log("updatedColumns", updatedColumns);
         dispatch(moveItem(updatedColumns));
         return updatedColumns;
       });
     }
   };
-
-  console.log("columns.todosTodo.items", columns.todosTodo.items);
-  console.log("columns.todosInProgress.items", columns.todosInProgress.items);
-  // if(columns?.todosDone?.items?[0]) {
-
-  // }
 
   return (
     <DragDropContext onDragEnd={(result) => onDragEnd(result, columns)}>
