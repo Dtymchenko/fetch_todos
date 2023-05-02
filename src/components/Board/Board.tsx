@@ -4,20 +4,22 @@ import { ColumnsFromBackend } from "../../data/ColumnsFromBacked";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { IColumns, IDragResult } from "../../interface";
 import Card from "../Card/Card";
-import { useAppSelector } from "../../redux/redux-hooks";
+import { useAppSelector, useAppDispatch } from "../../redux/redux-hooks";
+import { moveItem } from "../../redux/slices/mainSlice";
 
 const Board = () => {
+  const dispatch = useAppDispatch();
   const todosTodo = useAppSelector((state) => state.main.todosTodo);
-  const todosInProcess = useAppSelector((state) => state.main.todosInProcess);
+  const todosInProgress = useAppSelector((state) => state.main.todosInProgress);
   const todosDone = useAppSelector((state) => state.main.todosDone);
   const helper = useAppSelector((state) => state.main.helper);
   const [columns, setColumns] = React.useState<IColumns>(
-    ColumnsFromBackend(todosTodo, todosInProcess, todosDone)
+    ColumnsFromBackend(todosTodo, todosInProgress, todosDone)
   );
 
   React.useEffect(() => {
-    setColumns(ColumnsFromBackend(todosTodo, todosInProcess, todosDone));
-  }, [todosTodo, todosInProcess, todosDone, helper]);
+    setColumns(ColumnsFromBackend(todosTodo, todosInProgress, todosDone));
+  }, [todosTodo, todosInProgress, todosDone, helper]);
 
   const onDragEnd = (result: IDragResult, columns: IColumns) => {
     if (!result.destination) return;
@@ -29,31 +31,47 @@ const Board = () => {
       const destItems = [...destColumn.items];
       const [removed] = sourceItems.splice(source.index, 1);
       destItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...sourceColumn,
-          items: sourceItems,
-        },
-        [destination.droppableId]: {
-          ...destColumn,
-          items: destItems,
-        },
+      setColumns((prev) => {
+        const updatedColumns = {
+          ...columns,
+          [source.droppableId]: {
+            ...sourceColumn,
+            items: sourceItems,
+          },
+          [destination.droppableId]: {
+            ...destColumn,
+            items: destItems,
+          },
+        };
+        console.log("updatedColumns", updatedColumns);
+        dispatch(moveItem(updatedColumns));
+        return updatedColumns;
       });
     } else {
       const column = columns[source.droppableId];
       const copiedItems = [...column.items];
       const [removed] = copiedItems.splice(source.index, 1);
       copiedItems.splice(destination.index, 0, removed);
-      setColumns({
-        ...columns,
-        [source.droppableId]: {
-          ...column,
-          items: copiedItems,
-        },
+      setColumns((prev) => {
+        const updatedColumns = {
+          ...columns,
+          [source.droppableId]: {
+            ...column,
+            items: copiedItems,
+          },
+        };
+        console.log("updatedColumns", updatedColumns);
+        dispatch(moveItem(updatedColumns));
+        return updatedColumns;
       });
     }
   };
+
+  console.log("columns.todosTodo.items", columns.todosTodo.items);
+  console.log("columns.todosInProgress.items", columns.todosInProgress.items);
+  // if(columns?.todosDone?.items?[0]) {
+
+  // }
 
   return (
     <DragDropContext onDragEnd={(result) => onDragEnd(result, columns)}>

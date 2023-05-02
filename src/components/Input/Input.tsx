@@ -22,7 +22,7 @@ const Input = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const regex = /^https:\/\/github.com\/\w+\/\w+$/;
+    const regex = /^https:\/\/github.com\/[\w-]+\/[\w-]+$/;
     if (!regex.test(inputValue)) {
       alert(
         "Invalid input format. Please enter a valid GitHub repo URL. Correct format: https://github.com/username/repo"
@@ -35,7 +35,7 @@ const Input = () => {
       try {
         dispatch(setHelper());
         dispatch(setNullStorage());
-        
+
         const URL: string =
           inputValue.replace("github.com", "api.github.com/repos") + "/issues";
 

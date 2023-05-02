@@ -3,22 +3,26 @@ import { v4 as uuidv4 } from "uuid";
 
 export const ColumnsFromBackend = (
   todosTodo: IGitHubIssue[],
-  todosInProcess: IGitHubIssue[],
+  todosInProgress: IGitHubIssue[],
   todosDone: IGitHubIssue[]
 ): IColumns => {
   return {
-    [uuidv4()]: {
+    // uuidv4()
+    ["todosTodo"]: {
       title: "ToDo",
+      id: "Todo",
       bg: "/img/bg-section-1.jpg",
       items: todosTodo,
     },
-    [uuidv4()]: {
+    ["todosInProgress"]: {
       title: "In Progress",
+      id: "InProgress",
       bg: "/img/bg-section-2.jpg",
-      items: todosInProcess,
+      items: todosInProgress,
     },
-    [uuidv4()]: {
+    ["todosDone"]: {
       title: "Done",
+      id: "Done",
       bg: "/img/bg-section-3.jpg",
       items: todosDone,
     },

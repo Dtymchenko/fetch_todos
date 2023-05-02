@@ -1,20 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IGitHubIssue } from "../../interface";
+import { IMoveItem } from "../../interface";
 
 interface initialState {
   inputValue: string;
   todosTodo: IGitHubIssue[];
-  todosInProcess: IGitHubIssue[];
+  todosInProgress: IGitHubIssue[];
   todosDone: IGitHubIssue[];
   helper: boolean;
+  REPO_URL: string;
 }
 
 const initialState: initialState = {
   inputValue: "",
   todosTodo: [],
-  todosInProcess: [],
+  todosInProgress: [],
   todosDone: [],
   helper: false,
+  REPO_URL: "",
 };
 
 export const mainSlice = createSlice({
@@ -26,72 +29,76 @@ export const mainSlice = createSlice({
     },
     setNullStorage(state) {
       state.todosTodo = [];
-      state.todosInProcess = [];
+      state.todosInProgress = [];
       state.todosDone = [];
     },
     setHelper(state) {
       state.helper = !state.helper;
     },
+    moveItem(state, action) {
+      state.todosTodo = action.payload.todosTodo.items;
+      state.todosInProgress = action.payload.todosInProgress.items;
+      state.todosDone = action.payload.todosDone.items;
+
+      console.log("moveItemLocalStorage works");
+
+      const storage = JSON.parse(localStorage.getItem(state.REPO_URL) || "{}");
+      const data = {
+        todosTodo: action.payload.todosTodo.items,
+        todosInProgress: action.payload.todosInProgress.items,
+        todosDone: action.payload.todosDone.items,
+        // todosTodo: state.todosTodo,
+        // todosInProgress: state.todosInProgress,
+        // todosDone: state.todosDone,
+      };
+      console.log("storage", storage);
+      console.log("data", data);
+      localStorage.setItem(state.REPO_URL, JSON.stringify(data));
+      console.log("storage saved to local storage");
+      console.log("storage", storage);
+      console.log("data", data);
+    },
     setTodos(state, action) {
-      const REPO_URL = action.payload[0].repository_url;
-      if (localStorage.getItem(REPO_URL) === null) {
+      state.REPO_URL = action.payload[0].repository_url;
+      if (localStorage.getItem(state.REPO_URL) === null) {
         const data = {
           todosTodo: action.payload,
-          todosInProcess: [],
+          todosInProgress: [],
           todosDone: [],
         };
-        localStorage.setItem(REPO_URL, JSON.stringify(data));
+        localStorage.setItem(state.REPO_URL, JSON.stringify(data));
         state.todosTodo = action.payload;
       } else {
-        let storage = JSON.parse(localStorage.getItem(REPO_URL) || "{}");
+        let storage = JSON.parse(localStorage.getItem(state.REPO_URL) || "{}");
         action.payload.forEach((todo: IGitHubIssue) => {
           if (
-            storage?.todosInProcess?.some(
+            storage?.todosInProgress?.some(
               (item: IGitHubIssue) => item.title === todo.title
             )
           ) {
-            state.todosInProcess = [...state.todosInProcess, todo];
+            state.todosInProgress = [...state.todosInProgress, todo];
           } else if (
             storage?.todosDone?.some(
               (item: IGitHubIssue) => item.title === todo.title
             )
           ) {
             state.todosDone = [...state.todosDone, todo];
-          }
-          //  else if (
-          //   storage?.todosTodo?.some(
-          //     (item: IGitHubIssue) => item.title === todo.title
-          //   )
-          // ) {
-          //   state.todosTodo = [...state.todosTodo, todo];
-          // }
-          else {
+          } else {
             state.todosTodo = [...state.todosTodo, todo];
           }
         });
         const data = {
           todosTodo: state.todosTodo,
-          todosInProcess: state.todosInProcess,
+          todosInProgress: state.todosInProgress,
           todosDone: state.todosDone,
         };
-        localStorage.setItem(REPO_URL, JSON.stringify(data));
+        localStorage.setItem(state.REPO_URL, JSON.stringify(data));
       }
     },
-    // setTodosTodo(state, action) {
-    //   state.todos = action.payload;
-    //   console.log(action.payload[0].repository_url);
-    //   if (localStorage.getItem(action.payload.repository_url) === null) {
-    //     localStorage.setItem(
-    //       action.payload[0].repository_url,
-    //       JSON.stringify(action.payload)
-    //     );
-    //     console.log("saved all todos to localstorage");
-    //   }
-    // },
   },
 });
 
-export const { setInputValue, setTodos, setHelper, setNullStorage } =
+export const { setInputValue, setTodos, setHelper, setNullStorage, moveItem } =
   mainSlice.actions;
 
 export default mainSlice.reducer;

@@ -210,6 +210,8 @@ export interface IGitHubRepo {
 
 export interface IColumn {
   title: string;
+  // id: string;
+  id: "Todo" | "InProgress" | "Done";
   items: IGitHubIssue[];
   bg: string;
 }
@@ -222,6 +224,22 @@ export interface IDragResult {
   draggableId: string;
   type: string;
   reason?: string;
+  source: {
+    droppableId: string;
+    index: number;
+  };
+  destination?: {
+    droppableId: string;
+    index: number;
+  } | null;
+}
+
+export interface IMoveItem {
+  sourceColumn: IColumn;
+  destColumn: IColumn;
+  sourceItems: IGitHubIssue[];
+  destItems: IGitHubIssue[];
+  removed: IGitHubIssue;
   source: {
     droppableId: string;
     index: number;
