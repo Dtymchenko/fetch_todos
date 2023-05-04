@@ -1,11 +1,9 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
 import Card from "./Card";
 import { store } from "../../redux/store";
 import { IGitHubIssue } from "../../interface";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import styles from "../Board/Board.module.scss";
 
 const mockItem: IGitHubIssue = {
   url: "",
@@ -121,14 +119,10 @@ describe("Card component", () => {
         <DragDropContext onDragEnd={() => {}}>
           <Droppable key="random-test-key" droppableId="droppable-id">
             {(provided) => (
-                <div
-                    ref={provided.innerRef}
-                    {...provided.droppableProps}
-                >
-                  <Card item={mockItem} index={0} />
-                </div>
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                <Card item={mockItem} index={0} />
+              </div>
             )}
-
           </Droppable>
         </DragDropContext>
       </Provider>

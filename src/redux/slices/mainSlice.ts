@@ -10,7 +10,7 @@ interface initialState {
   REPO_URL: string;
 }
 
-const initialState: initialState = {
+export const initialState: initialState = {
   inputValue: "",
   todosTodo: [],
   todosInProgress: [],
