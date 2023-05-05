@@ -24,14 +24,11 @@ const Card: React.FC<CardProps> = ({ item, index }) => {
               <p>#{item.number}</p>
               <p>
                 <span>
-                  {/* {new Date(item.created_at).toLocaleDateString("en-us", {
-                    month: "short",
-                    day: "2-digit",
-                  })} */}
                   opened{" "}
-                  {intlFormatDistance(new Date(item.created_at), Date.now(), {
-                    locale: "en",
-                  })}
+                  {item.created_at &&
+                    intlFormatDistance(new Date(item.created_at), Date.now(), {
+                      locale: "en",
+                    })}
                 </span>
               </p>
             </div>

@@ -7,7 +7,6 @@ export const ColumnsFromBackend = (
   todosDone: IGitHubIssue[]
 ): IColumns => {
   return {
-    // uuidv4()
     ["todosTodo"]: {
       title: "ToDo",
       id: "Todo",

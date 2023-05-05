@@ -43,6 +43,7 @@ const Board = () => {
             items: destItems,
           },
         };
+        console.log(updatedColumns);
         dispatch(moveItem(updatedColumns));
         return updatedColumns;
       });

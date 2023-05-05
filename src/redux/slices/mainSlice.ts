@@ -38,7 +38,6 @@ export const mainSlice = createSlice({
       state.todosTodo = action.payload.todosTodo.items;
       state.todosInProgress = action.payload.todosInProgress.items;
       state.todosDone = action.payload.todosDone.items;
-      const storage = JSON.parse(localStorage.getItem(state.REPO_URL) || "{}");
       const data = {
         todosTodo: action.payload.todosTodo.items,
         todosInProgress: action.payload.todosInProgress.items,

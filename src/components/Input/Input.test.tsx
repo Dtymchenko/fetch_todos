@@ -1,5 +1,4 @@
-import React from "react";
-import { render, fireEvent, screen, waitFor } from "@testing-library/react";
+import { render, fireEvent, screen, act } from "@testing-library/react";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
 
@@ -42,8 +41,10 @@ describe("Input", () => {
       </Provider>
     );
     const inputElement = screen.getByPlaceholderText("Enter repo URL");
-    fireEvent.change(inputElement, {
-      target: { value: "https://github.com/test/test" },
+    act(() => {
+      fireEvent.change(inputElement, {
+        target: { value: "https://github.com/test/test" },
+      });
     });
     expect(store.getActions()).toContainEqual(
       setInputValue("https://github.com/test/test")
