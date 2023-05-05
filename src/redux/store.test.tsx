@@ -84,11 +84,12 @@ describe("moveItem", () => {
             todosInProgress: [],
             todosDone: [],
             helper: false,
-            REPO_URL: "",
+            REPO_URL: "repo",
           },
         },
       }),
     });
+    localStorage.clear();
     store.dispatch(moveItem(columnsTest));
     expect(store.getState().main.todosTodo).toEqual(
       columnsTest["todosTodo"].items
@@ -98,6 +99,13 @@ describe("moveItem", () => {
     );
     expect(store.getState().main.todosDone).toEqual(
       columnsTest["todosDone"].items
+    );
+    expect(localStorage.getItem("repo")).toEqual(
+      JSON.stringify({
+        todosTodo: columnsTest["todosTodo"].items,
+        todosInProgress: columnsTest["todosInProgress"].items,
+        todosDone: columnsTest["todosDone"].items,
+      })
     );
   });
 });
