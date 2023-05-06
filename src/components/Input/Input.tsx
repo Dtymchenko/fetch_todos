@@ -81,6 +81,7 @@ const Input = () => {
               variant="outline-secondary"
               className={styles.btn}
               id="button-addon2"
+              data-testid="load-issues-button"
             >
               Load issues
             </Button>

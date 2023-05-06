@@ -8,6 +8,7 @@ import { setInputValue } from "../../redux/slices/mainSlice";
 const mockStore = configureStore([]);
 
 jest.mock("axios");
+window.alert = jest.fn();
 
 describe("Input", () => {
   let store: ReturnType<typeof mockStore>;
@@ -49,5 +50,22 @@ describe("Input", () => {
     expect(store.getActions()).toContainEqual(
       setInputValue("https://github.com/test/test")
     );
+  });
+
+  test("shows error message for invalid input format", () => {
+    render(
+      <Provider store={store}>
+        <Input />
+      </Provider>
+    );
+    const inputElement = screen.getByPlaceholderText("Enter repo URL");
+    act(() => {
+      fireEvent.change(inputElement, {
+        target: { value: "myrepo" },
+      });
+    });
+    const buttonElement = screen.getByTestId("load-issues-button");
+    fireEvent.click(buttonElement);
+    expect(window.alert).toHaveBeenCalledTimes(1);
   });
 });
